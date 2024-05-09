@@ -1,0 +1,28 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.ehcache.org/v3"
+        xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd">
+
+
+    <cache alias="ru.nglushko.testio.models.entity.User" uses-template="largeTransactionalData"/>
+    <cache alias="ru.nglushko.testio.models.entity.Media" uses-template="largeTransactionalData"/>
+    <cache alias="ru.nglushko.testio.models.entity.Achievement" uses-template="largeTransactionalData"/>
+    <cache alias="ru.nglushko.testio.models.entity.Test" uses-template="largeTransactionalData"/>
+    <cache alias="ru.nglushko.testio.models.entity.Question" uses-template="largeTransactionalData"/>
+
+
+    <cache alias="ru.nglushko.testio.models.User##NaturalId" uses-template="largeTransactionalData"/>
+    <cache alias="ru.nglushko.testio.models.Media##NaturalId" uses-template="largeTransactionalData"/>
+    <cache alias="ru.nglushko.testio.models.Achievement##NaturalId" uses-template="largeTransactionalData"/>
+    <cache alias="ru.nglushko.testio.models.Test##NaturalId" uses-template="largeTransactionalData"/>
+    <cache alias="ru.nglushko.testio.models.Question##NaturalId" uses-template="largeTransactionalData"/>
+
+
+    <cache-template name="largeTransactionalData">
+        <expiry>
+            <ttl unit="millis">100</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">10000</heap>
+        </resources>
+    </cache-template>
+</config>

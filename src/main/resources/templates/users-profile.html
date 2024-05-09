@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title th:text="${user.username}+' / Личный кабинет - MyTests'"></title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="/assets/img/favicon.png" rel="icon">
+    <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+          rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="/assets/vendor/quill/quill.snow.css" rel="stylesheet">
+    <link href="/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
+    <link href="/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
+    <link href="/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="/assets/css/style.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+        <a href="/" class="logo d-flex align-items-center">
+            <img src="/assets/img/logo.png" alt="">
+            <span class="d-none d-lg-block">MyTests</span>
+        </a>
+        <i class="bi bi-list toggle-sidebar-btn"></i>
+    </div><!-- End Logo -->
+
+    <div class="search-bar">
+        <form class="search-form d-flex align-items-center" method="POST" action="#">
+            <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+            <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+        </form>
+    </div><!-- End Search Bar -->
+
+    <nav class="header-nav ms-auto">
+        <ul class="d-flex align-items-center">
+
+            <li class="nav-item d-block d-lg-none">
+                <a class="nav-link nav-icon search-bar-toggle " href="#">
+                    <i class="bi bi-search"></i>
+                </a>
+            </li><!-- End Search Icon-->
+
+            <li class="nav-item dropdown pe-3">
+
+                <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                    <img th:src="${user.avatar!=null ? '/image/' +  user.avatar.getId():
+                                'https://bootdey.com/img/Content/avatar/avatar6.png'}" alt="Profile"
+                         class="rounded-circle">
+                    <span class="d-none d-md-block dropdown-toggle ps-2" th:text="${user.username}"></span>
+                </a><!-- End Profile Iamge Icon -->
+
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                    <li class="dropdown-header">
+                        <h6 th:text="${user.name}+' '+${user.surname}"></h6>
+                        <span sec:authorize="hasRole('ROLE_STUDENT')">Студент</span>
+                        <span sec:authorize="hasRole('ROLE_TEACHER')">Преподаватель</span>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" href="/profile">
+                            <i class="bi bi-person"></i>
+                            <span>Мой профиль</span>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" href="/profile#edit-profile">
+                            <i class="bi bi-gear"></i>
+                            <span>Настройки аккаунта</span>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" href="/logout">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Выйти</span>
+                        </a>
+                    </li>
+
+                </ul><!-- End Profile Dropdown Items -->
+            </li><!-- End Profile Nav -->
+
+        </ul>
+    </nav><!-- End Icons Navigation -->
+
+</header><!-- End Header -->
+
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="/">
+                <i class="bi bi-grid"></i>
+                <span>Главная</span>
+            </a>
+        </li><!-- End Dashboard Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link " href="/profile">
+                <i class="bi bi-person"></i>
+                <span>Профиль</span>
+            </a>
+        </li>
+
+        <li sec:authorize="hasRole('ROLE_TEACHER')" class="nav-item">
+            <a class="nav-link collapsed" href="/test">
+                <i class="bi bi-card-checklist"></i>
+                <span>Тесты</span>
+            </a>
+        </li>
+        <li  class="nav-item">
+            <a class="nav-link collapsed" href="/test">
+                <i class="bi bi-tablet"></i>
+                <span>Статистика</span>
+            </a>
+        </li>
+    </ul>
+
+</aside><!-- End Sidebar-->
+
+<main id="main" class="main">
+
+    <div class="pagetitle">
+        <h1>Профиль</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Главная</a></li>
+                <li class="breadcrumb-item" th:text="${user.username}"></li>
+                <li class="breadcrumb-item active">Личный кабинет</li>
+            </ol>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section profile">
+        <div class="row">
+            <div class="col-xl-4">
+
+                <div class="card">
+                    <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+
+                        <img th:src="${user.avatar!=null ? '/image/' +  user.avatar.getId():
+                                'https://bootdey.com/img/Content/avatar/avatar6.png'}" alt="Profile"
+                             class="rounded-circle">
+                        <h2 th:text="${user.name}+' '+${user.surname}"></h2>
+                        <h3 th:text="'Зарегестрирован с '+${#temporals.format(user.registrationDate,'dd.MM.yyyy')}">
+                            r</h3>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-xl-8">
+
+                <div class="card">
+                    <div class="card-body pt-3">
+                        <!-- Bordered Tabs -->
+                        <ul class="nav nav-tabs nav-tabs-bordered">
+
+                            <li class="nav-item">
+                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">
+                                    Ваш профиль
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-overview">
+                                    Ваши достижения
+                                </button>
+                            </li>
+
+
+
+                        </ul>
+                        <div class="tab-content pt-2">
+
+                            <div class="tab-pane fade show active  profile-overview" id="profile-overview">
+
+                                <h5 class="card-title">Основная информация</h5>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label ">Ник</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${user.username}"></div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label ">Полное имя</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${user.name}+' '+${user.surname}"></div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-4 label">Email</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${user.email}"></div>
+                                </div>
+
+                            </div>
+
+                            <div class="tab-pane fade profile-edit pt-3 active show" id="profile-edit">
+                                <h5 class="card-title">Измените ваш профиль</h5>
+
+                                <!-- Profile Edit Form -->
+                                <form action="/image/upload" method="post" enctype="multipart/form-data">
+                                    <div class="row mb-3">
+                                        <label class="col-md-4 col-lg-3 col-form-label">Аватар</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            <img th:src="${user.avatar!=null ? '/image/' +  user.avatar.id:
+                                'https://bootdey.com/img/Content/avatar/avatar6.png'}" alt="Profile">
+
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="Image" class="col-md-4 col-lg-3 col-form-label">Загрузите
+                                            изображение</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            <input name="Image" accept="image/*" type="file" class="form-control"
+                                                   id="Image">
+                                        </div>
+
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="text-center">
+                                            <button type="submit" class="btn btn-primary">Сохранить фото</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                <form action="/edit" th:object="${newUser}" th:method="POST">
+                                    <div th:if="${profileChanged}">
+                                        <div class="alert alert-success">
+                                            Основная информация обновлена
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="Username" class="col-md-4 col-lg-3 col-form-label">Ник</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            <input type="text" class="form-control" id="Username" name="username"
+                                                   th:value="${user.username}"
+                                                   th:classappend=" ${#fields.hasErrors('username')} ? 'is-invalid' : ''">
+                                        </div>
+                                        <div class="invalid-feedback text-left mb-3"
+                                             th:if="${#fields.hasErrors('username')}"
+                                             th:text=" ${#fields.errors('username').get(0) }">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label for="Name" class="col-md-4 col-lg-3 col-form-label">Имя</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            <input type="text" class="form-control" id="Name" name="name"
+                                                   th:value="${user.name}"
+                                                   th:classappend=" ${#fields.hasErrors('name')} ? 'is-invalid' : ''">
+                                        </div>
+                                        <div class="invalid-feedback text-left mb-3"
+                                             th:if="${#fields.hasErrors('name')}"
+                                             th:text=" ${#fields.errors('name').get(0) }">
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="Surname" class="col-md-4 col-lg-3 col-form-label">Фамилия</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            <input type="text" class="form-control" id="Surname" name="surname"
+                                                   th:value="${user.surname}"
+                                                   th:classappend=" ${#fields.hasErrors('surname')} ? 'is-invalid' : ''">
+                                        </div>
+                                        <div class="invalid-feedback text-left mb-3"
+                                             th:if="${#fields.hasErrors('surname')}"
+                                             th:text=" ${#fields.errors('surname').get(0) }">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row mb-3">
+                                        <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            <input type="email" class="form-control" id="Email" name="email"
+                                                   th:value="${user.email}"
+                                                   th:classappend=" ${#fields.hasErrors('email')} ? 'is-invalid' : ''">
+                                        </div>
+                                        <div class="invalid-feedback text-left mb-3"
+                                             th:if="${#fields.hasErrors('email')}"
+                                             th:text=" ${#fields.errors('email').get(0) }">
+                                        </div>
+                                    </div>
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                                    </div>
+                                </form><!-- End Profile Edit Form -->
+
+                            </div>
+
+
+                            <div class="tab-pane fade pt-3 active show" id="profile-change-password">
+                                <h5 class="card-title">Сменить пароль</h5>
+                                <!-- Change Password Form -->
+                                <form th:action="@{/edit/password} "
+                                      th:method="POST">
+                                    <div th:if="${errorCurrentPassword}">
+                                        <div class="alert alert-danger">
+                                            Неверный текущий пароль
+                                        </div>
+                                    </div>
+                                    <div th:if="${errorPassword}">
+                                        <div class="alert alert-danger">
+                                            Новые пароли не совпадают
+                                        </div>
+                                    </div>
+                                    <div th:if="${passwordChanged}">
+                                        <div class="alert alert-success">
+                                            Пароль изменен
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Текущий
+                                            пароль</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            <input name="currentPassword" type="password" class="form-control"
+                                                   id="currentPassword">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">Новый
+                                            пароль</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            <input name="newPassword" type="password" class="form-control"
+                                                   id="newPassword">
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-3">
+                                        <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Повторите
+                                            новый пароль</label>
+                                        <div class="col-md-8 col-lg-9">
+                                            <input name="renewPassword" type="password" class="form-control"
+                                                   id="renewPassword">
+                                        </div>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <button type="submit" class="btn btn-primary">Сменить пароль</button>
+                                    </div>
+                                </form><!-- End Change Password Form -->
+
+                            </div>
+
+                        </div><!-- End Bordered Tabs -->
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</main><!-- End #main -->
+
+<!-- ======= Footer ======= -->
+<footer id="footer" class="footer">
+    <div class="copyright">
+        &copy; Copyright <strong><span>MyTest</span></strong>. Все права (не) защищены
+    </div>
+    <div class="credits">
+        Разработчик <a href="https://github.com/HukoJlauII">HukoJlauII</a>
+    </div>
+</footer><!-- End Footer -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script src="/assets/vendor/apexcharts/apexcharts.min.js"></script>
+<script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/vendor/chart.js/chart.min.js"></script>
+<script src="/assets/vendor/echarts/echarts.min.js"></script>
+<script src="/assets/vendor/quill/quill.min.js"></script>
+<script src="/assets/vendor/simple-datatables/simple-datatables.js"></script>
+<script src="/assets/vendor/tinymce/tinymce.min.js"></script>
+<script src="/assets/vendor/php-email-form/validate.js"></script>
+
+<!-- Template Main JS File -->
+<script src="/assets/js/main.js"></script>
+
+</body>
+
+</html>
